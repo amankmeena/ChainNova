@@ -1,25 +1,14 @@
 const hre = require("hardhat");
 
 async function main() {
-  // Get the ContractFactory for TokenAuditTrail
-  const TokenAuditTrail = await hre.ethers.getContractFactory(
-    "TokenAuditTrail"
-  );
+  const Project = await hre.ethers.getContractFactory("ChainNova");
+  const project = await Project.deploy();
+  await project.waitForDeployment();
 
-  console.log("Deploying TokenAuditTrail contract...");
-
-  // Deploy the contract
-  const tokenAuditTrail = await TokenAuditTrail.deploy();
-
-  await tokenAuditTrail.deployed();
-
-  console.log("TokenAuditTrail deployed to:", tokenAuditTrail.address);
+  console.log("✅ Project deployed to:", await project.getAddress());
 }
 
-// Handle errors and run main
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
